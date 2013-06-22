@@ -217,7 +217,7 @@ for (( i=1; i <= $TOTFRAMES; i++ ))
 do
   echo "Capturing"
   eval "$RESETEOS"
-  gphoto2 --capture-image
+  gphoto2 --capture-image-and-download --filename 001.jpg --hook-script /usr/local/bin/move_gphoto.sh
 
   ISTRIPPOINT=$(( i % TRIPPOINT ))
 
