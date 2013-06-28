@@ -67,7 +67,7 @@ scale             = Optional, video scale. The Pi may not have the capacity to g
                     Default 640:400. 
 "
 
-HASEOS=`lsusb | grep "EOS 600D" | wc -l | awk '{print $1}'`
+HASEOS=`lsusb | grep "Canon" | wc -l | awk '{print $1}'`
 APERTURE=8
 STARTSHUTTERSPEED="1/200"
 ENDSHUTTERSPEED="1/200"
@@ -84,6 +84,9 @@ CAPTUREDELAY=5
 #===============================================================================
 # Parse arguments
 #===============================================================================
+
+/usr/local/bin/syncdatetime
+
 if [ $# -eq 0 ] ; then
    echo >&2 "$usage"
    exit 1;
@@ -136,7 +139,7 @@ if [ ! -z "$JPGPATH" ] ; then
   rm $JPGPATH/*
 fi
 
-RESETEOS=`lsusb | grep "EOS 600D" | sed 's/://g' | awk '{print "~/bin/usbreset /dev/bus/usb/" $2 "/" $4}'`
+RESETEOS=`lsusb | grep "Canon" | sed 's/://g' | awk '{print "usbreset /dev/bus/usb/" $2 "/" $4}'`
 
 eval "$RESETEOS"
 CURRMODE=`gphoto2 --get-config /main/capturesettings/autoexposuremode | grep Current | awk '{print $2}'`
@@ -217,7 +220,7 @@ for (( i=1; i <= $TOTFRAMES; i++ ))
 do
   echo "Capturing"
   eval "$RESETEOS"
-  gphoto2 --capture-image-and-download --filename 001.jpg --hook-script /usr/local/bin/move_gphoto.sh
+  gphoto2 --capture-image-and-download --filename 001.jpg --force-overwrite --hook-script /usr/local/bin/move_gphoto.sh
 
   ISTRIPPOINT=$(( i % TRIPPOINT ))
 
